@@ -56,12 +56,13 @@ metadata:
 	name: {{ template "{% .AppName %}.{% .Name %}.name" . }}
 	labels:
 		kubed: {{ template "{% .AppName %}.name" . }}
-		generator: {% .Name %}
+		component: {% .Name %}
+		generator: go
 spec:
 	selector:
 		matchLabels:
 			kubed: {{ template "{% .AppName %}.name" . }}
-			generator: {% .Name %}
+			component: {% .Name %}
 	replicas: {{ default .Values.{% .Name %}.replicaCount 1 }}
 	template:
 		metadata:
@@ -69,7 +70,7 @@ spec:
 				buildID: {{ .Values.buildID }}
 			labels:
 				kubed: {{ template "{% .AppName %}.name" . }}
-				generator: {% .Name %}
+				component: {% .Name %}
 		spec:
 			containers:
 				- name: {% .Name %}
@@ -86,11 +87,12 @@ metadata:
 	name: {{ template "{% .AppName %}.{% .Name %}.name" . }}
 	labels:
 		kubed: {{ template "{% .AppName %}.name" . }}
-		generator: {% .Name %}
+		component: {% .Name %}
+		generator: go
 spec:
 	selector:
 		kubed: {{ template "{% .AppName %}.name" . }}
-		generator: {% .Name %}
+		component: {% .Name %}
 	ports:
 		- port: 80
 			targetPort: http
