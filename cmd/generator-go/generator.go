@@ -37,67 +37,67 @@ CMD ["app"]
 	maingo = `package main
 
 import (
-	"fmt"
-	"net/http"
+    "fmt"
+    "net/http"
 )
 
 func handler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Hello World, I'm a Go app!\n")
+    fmt.Fprintf(w, "Hello World, I'm a Go app!\n")
 }
 
 func main() {
-	http.HandleFunc("/", handler)
-	http.ListenAndServe(":8080", nil)
+    http.HandleFunc("/", handler)
+    http.ListenAndServe(":8080", nil)
 }
 `
 	deploymentTemplate = `kind: Deployment
 apiVersion: apps/v1
 metadata:
-	name: {{ template "{% .AppName %}.{% .Name %}.name" . }}
-	labels:
-		kubed: {{ template "{% .AppName %}.name" . }}
-		component: {% .Name %}
-		generator: go
+  name: {{ template "{% .AppName %}.{% .Name %}.name" . }}
+  labels:
+    kubed: {{ template "{% .AppName %}.name" . }}
+    component: {% .Name %}
+    generator: go
 spec:
-	selector:
-		matchLabels:
-			kubed: {{ template "{% .AppName %}.name" . }}
-			component: {% .Name %}
-	replicas: {{ default .Values.{% .Name %}.replicaCount 1 }}
-	template:
-		metadata:
-			annotations:
-				buildID: {{ .Values.buildID }}
-			labels:
-				kubed: {{ template "{% .AppName %}.name" . }}
-				component: {% .Name %}
-		spec:
-			containers:
-				- name: {% .Name %}
-					image: "{{ .Values.{% .Name %}.image.repository }}:{{ .Values.{% .Name %}.image.tag }}"
-					imagePullPolicy: {{ default .Values.{% .Name %}.image.pullPolicy "IfNotPresent" }}
-					ports:
-						- name: http
-							containerPort: 8080
-							protocol: TCP
+  selector:
+    matchLabels:
+      kubed: {{ template "{% .AppName %}.name" . }}
+      component: {% .Name %}
+  replicas: {{ default .Values.{% .Name %}.replicaCount 1 }}
+  template:
+    metadata:
+      annotations:
+        buildID: {{ .Values.buildID }}
+      labels:
+        kubed: {{ template "{% .AppName %}.name" . }}
+        component: {% .Name %}
+    spec:
+      containers:
+        - name: {% .Name %}
+          image: "{{ .Values.{% .Name %}.image.repository }}:{{ .Values.{% .Name %}.image.tag }}"
+          imagePullPolicy: {{ default .Values.{% .Name %}.image.pullPolicy "IfNotPresent" }}
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
 `
 	serviceTemplate = `kind: Service
 apiVersion: v1
 metadata:
-	name: {{ template "{% .AppName %}.{% .Name %}.name" . }}
-	labels:
-		kubed: {{ template "{% .AppName %}.name" . }}
-		component: {% .Name %}
-		generator: go
+  name: {{ template "{% .AppName %}.{% .Name %}.name" . }}
+  labels:
+    kubed: {{ template "{% .AppName %}.name" . }}
+    component: {% .Name %}
+    generator: go
 spec:
-	selector:
-		kubed: {{ template "{% .AppName %}.name" . }}
-		component: {% .Name %}
-	ports:
-		- port: 80
-			targetPort: http
-			protocol: TCP
-			name: http
+  selector:
+    kubed: {{ template "{% .AppName %}.name" . }}
+    component: {% .Name %}
+  ports:
+    - port: 80
+      targetPort: http
+      protocol: TCP
+      name: http
 `
 	helperTemplate = `
 {{- define "{% .AppName %}.{% .Name %}.name" -}}
@@ -106,7 +106,7 @@ spec:
 `
 	valuesTemplate = `
 {% .Name %}:
-	image: {}
+  image: {}
 `
 )
 
